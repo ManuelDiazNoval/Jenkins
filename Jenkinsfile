@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         VENV_DIR = 'venv'
+        PYTHONPATH = "${WORKSPACE}/src"
     }
 
     stages {
@@ -32,7 +33,7 @@ pipeline {
             steps {
                 sh '''
                     . $VENV_DIR/bin/activate
-                    pytest --junitxml=test-results/results.xml || true
+                    pytest --junitxml=test-results/results.xml
                 '''
             }
         }
