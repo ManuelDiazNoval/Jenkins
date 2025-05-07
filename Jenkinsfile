@@ -1,55 +1,46 @@
 pipeline {
     agent any
-
     environment {
-        VENV_DIR = 'venv'
+        // Aseguramos que el directorio 'src' esté en el PYTHONPATH
+        PYTHONPATH = "${WORKSPACE}/src"
     }
-
     stages {
+        stage('Declarative: Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Clonar repositorio') {
             steps {
-                git credentialsId: 'github-token', url: 'https://github.com/ManuelDiazNoval/Jenkins.git', branch: 'main'
+                git 'https://github.com/ManuelDiazNoval/Jenkins.git'
             }
         }
-
         stage('Crear entorno virtual') {
             steps {
-                sh 'python3 -m venv $VENV_DIR'
+                sh 'python3 -m venv venv'
             }
         }
-
         stage('Instalar dependencias') {
             steps {
                 sh '''
-                    . $VENV_DIR/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
                 '''
             }
         }
-
         stage('Ejecutar pruebas') {
             steps {
                 sh '''
-                    . $VENV_DIR/bin/activate
-                    pytest --junitxml=test-results/results.xml || true
+                . venv/bin/activate
+                pytest --junitxml=test-results/results.xml
                 '''
             }
         }
-
         stage('Publicar resultados') {
             steps {
-                junit 'test-results/results.xml'
+                junit '**/test-results/results.xml'
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline ejecutado correctamente.'
-        }
-        failure {
-            echo 'El pipeline falló. Revisa los logs.'
         }
     }
 }
