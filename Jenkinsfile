@@ -21,7 +21,7 @@ pipeline {
         stage('Instalar dependencias') {
             steps {
                 sh '''
-                    source $VENV_DIR/bin/activate
+                    . $VENV_DIR/bin/activate
                     pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
@@ -31,7 +31,7 @@ pipeline {
         stage('Ejecutar pruebas') {
             steps {
                 sh '''
-                    source $VENV_DIR/bin/activate
+                    . $VENV_DIR/bin/activate
                     pytest --junitxml=test-results/results.xml || true
                 '''
             }
