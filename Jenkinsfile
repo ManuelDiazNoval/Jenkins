@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clonar repositorio') {
             steps {
-                git credentialsId: 'github-token', url: 'https://github.com/ManuelDiazNoval/Jenkins.git'
+                git credentialsId: 'github-token', url: 'https://github.com/ManuelDiazNoval/Jenkins.git', branch: 'main'
             }
         }
 
