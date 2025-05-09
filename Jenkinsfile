@@ -50,6 +50,12 @@ pipeline {
             }
         }
     }
+         stage('Construir imagen Docker') {
+            steps {
+                sh 'docker build -t prueba-jenkins:v1 .'
+            }
+        }
+    }
 
     post {
         always {
