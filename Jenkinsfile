@@ -49,8 +49,8 @@ pipeline {
                 junit '**/test-results/*.xml'
             }
         }
-    }
-         stage('Construir imagen Docker') {
+
+        stage('Construir imagen Docker') {
             steps {
                 sh 'docker build -t prueba-jenkins:v1 .'
             }
